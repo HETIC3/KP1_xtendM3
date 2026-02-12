@@ -89,7 +89,7 @@ public class Update extends ExtendM3Transaction {
 			}
 		})
 
-		if( invoiceTotal < 1e-2) {
+		if( Math.abs(invoiceTotal) < 1e-2) {
 			// MSGID=AR20109 The invoice is paid
 			String errorMessage = message.getMessage("AR20109", [])
 			mi.error(errorMessage)
