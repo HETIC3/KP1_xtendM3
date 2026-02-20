@@ -138,7 +138,6 @@ public class UpdLine extends ExtendM3Transaction {
 					mi.error("Offset division is only allowed for line type 1")
 					return
 				}
-				logger.info("DIVI:"+program.LDAZD.get("DIVI"))
 				DBAction cmfadvRecord = database.table("CMFADV").index("00").build()
 				DBContainer cmfadvContainer = cmfadvRecord.createContainer()
 				cmfadvContainer.setInt("M1CONO", cono)
@@ -175,7 +174,7 @@ public class UpdLine extends ExtendM3Transaction {
 					return
 				}
 				if(!stab.isBlank()) {
-					DBAction fgdishRecord = database.table("FGDISH").index("00").selection("BFTX40","BFRDRI").build()
+					DBAction fgdishRecord = database.table("FGDISH").index("00").selection("BFRDRI","BFAIH1","BFAIH2","BFAIH3","BFAIH4","BFAIH5","BFAIH6","BFAIH7").build()
 					DBContainer fgdishContainer = fgdishRecord.createContainer()
 					fgdishContainer.setInt("BFCONO", cono)
 					fgdishContainer.setString("BFDIVI", divi)
@@ -339,13 +338,13 @@ public class UpdLine extends ExtendM3Transaction {
 				int numberOfDiggits = utility.call("NumberUtil", "getNumberOfDigits", dirs)
 
 				if(numberOfDiggits > 13) {
-					mi.error("relative allocation percentage ne peux avoir plus de trois chiffres avant la virgule.")
+					mi.error("relative allocation percentage ne peux avoir plus de treize chiffres avant la virgule.")
 					return
 				}
 
 				int numberOfDecimal = utility.call("NumberUtil", "getNumberOfDecimals", dirs)
 				if(numberOfDecimal > 2) {
-					mi.error("relative allocation percentage ne peux avoir plus de trois chiffres après la virgule.")
+					mi.error("relative allocation percentage ne peux avoir plus de deux chiffres après la virgule.")
 					return
 				}
 
@@ -357,13 +356,13 @@ public class UpdLine extends ExtendM3Transaction {
 			}
 
 			if(bdtp == 2 || bdtp == 6 ) {
-				if(dirs == null) {
+				if(dirs == null  || dirs < 0) {
 					String errorMessage = message.getMessage("WDI5102", [])
 					mi.error(errorMessage)
 					return
 				}
 			}else {
-				if(dirs != null) {
+				if(dirs != null  && dirs > 0) {
 					String errorMessage = message.getMessage("GL06304", [])
 					mi.error(errorMessage)
 					return
